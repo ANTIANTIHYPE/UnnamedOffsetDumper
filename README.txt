@@ -8,8 +8,3 @@ Usage:
 4. Select main.py
 5. Set the output file
 6. Done
----
-NOTE: this plugin is designed to work with MetaPC,
-      this means you could get wrong addresses if
-      you choose another processor type
-      (maybe I'll do something with it)

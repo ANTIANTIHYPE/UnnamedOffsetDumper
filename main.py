@@ -1,10 +1,14 @@
+# This project is licensed under the GPL-3.0 License.
+# Copyright (c) 2024 YOUWILLDIE666
+
+
 import idautils, idaapi, idc
 import tkinter as tk
 from tkinter import filedialog
 import os
 
 # Constants
-COMMENT_HEADER = "/*\n * Image base: {}\n */\n"
+COMMENT_HEADER = "/*\n * Base Address: {}\n */\n"
 BASE_ADDRESS = None
 for func in idautils.Functions():
     BASE_ADDRESS = func
@@ -21,7 +25,7 @@ def write_header(file, base_name, is_header, is_header_pp): # i know this looks 
 def write_offsets(file, ea_list, comment_prefix):
     for ea in ea_list:
         name = idc.get_func_name(ea) if comment_prefix == 'function' else idc.get_name(ea)
-        offset = ea - BASE_ADDRESS#idaapi.get_imagebase()
+        offset = ea - BASE_ADDRESS
         file.write(f"    {hex(offset)}, // {name}\n")
 
 def write_data_offsets(file):
