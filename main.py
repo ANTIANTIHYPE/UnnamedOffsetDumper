@@ -5,6 +5,10 @@ import os
 
 # Constants
 COMMENT_HEADER = "/*\n * Image base: {}\n */\n"
+BASE_ADDRESS = None
+for func in idautils.Functions():
+    BASE_ADDRESS = func
+    break
 
 def write_header(file, base_name, is_header, is_header_pp): # i know this looks strange
     if is_header:
@@ -17,7 +21,7 @@ def write_header(file, base_name, is_header, is_header_pp): # i know this looks 
 def write_offsets(file, ea_list, comment_prefix):
     for ea in ea_list:
         name = idc.get_func_name(ea) if comment_prefix == 'function' else idc.get_name(ea)
-        offset = ea - idaapi.get_imagebase()
+        offset = ea - BASE_ADDRESS#idaapi.get_imagebase()
         file.write(f"    {hex(offset)}, // {name}\n")
 
 def write_data_offsets(file):
@@ -44,7 +48,7 @@ def dump_offsets(filename):
         is_cpp = True
 
     with open(filename, 'w') as file:
-        file.write(COMMENT_HEADER.format(idaapi.get_imagebase()))
+        file.write(COMMENT_HEADER.format(BASE_ADDRESS))
         write_header(file, base_name, is_header, is_header_pp)
         write_offsets(file, idautils.Functions(), 'function')
         file.write("};\n\n")
