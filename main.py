@@ -5,14 +5,16 @@
 #  main.py - dumps offsets based on the address of the first function  #
 ########################################################################
 
+# P.S. I won't switch to PyQt (at least for now)
 
 import idautils, idaapi, idc
 import tkinter as tk
+from tkinter import filedialog # ???
 import os
 
 # Constants
 COMMENT_HEADER = "/*\n * Base Address: {}\n */\n"
-BASE_ADDRESS = next(idautils.Functions(), None)
+BASE_ADDRESS = idaapi.get_imagebase()
 
 def write_header(file, base_name, is_header_int):
     hstr_map = {
@@ -73,10 +75,10 @@ def dump_offsets(filename):
 def select_file() -> str:
     root = tk.Tk()
     root.withdraw()
-    return tk.filedialog.asksaveasfilename(
+    return filedialog.asksaveasfilename(
         defaultextension=".cpp",
         filetypes=[
-            ("C++ Files", ("*.cpp", "*.hpp")),
+            ("C++ Files", ("*.cpp", "*.cxx", "*.c++", "*.cc", "*.hpp", "*.hxx", "*.h++", "*.hh")),
             ("C Files", ("*.c", ".h")),
             ("All Files", "*.*")
         ]
