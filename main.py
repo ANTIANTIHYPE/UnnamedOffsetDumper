@@ -1,5 +1,9 @@
-# This project is licensed under the GPL-3.0 License.
-# Copyright (c) 2024 YOUWILLDIE666
+# Copyright (c) YOUWILLDIE666.
+# Licensed under the GPL-3.0 license. See LICENSE.txt file for full license information.
+
+########################################################################
+#  main.py - dumps offsets based on the address of the first function  #
+########################################################################
 
 
 import idautils, idaapi, idc
@@ -26,7 +30,8 @@ def write_offsets(file, ea_list, comment_prefix):
     for ea in ea_list:
         name = idc.get_func_name(ea) if comment_prefix == 'function' else idc.get_name(ea)
         offset = ea - BASE_ADDRESS
-        file.write(f"    {hex(offset)}, // {name}\n")
+        if offset > 0 and offset < 0x7fffffff and name != None: # or 0xffffff i don't really know
+            file.write(f"    {hex(offset)}, // {name}\n")
 
 def write_data_offsets(file):
     file.write("const static uint32_t data_offsets[] = {\n")
